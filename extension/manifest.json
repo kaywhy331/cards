@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "EZ Cards Queue Assistant",
+  "version": "0.5.0",
+  "description": "Receives signed, personalized EZ Cards demo jobs and opens only the localized CardForge retailer lab for human-controlled testing.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://ezcards.netlify.app/*",
+    "http://localhost:8888/*",
+    "http://127.0.0.1:8888/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "EZ Cards Queue Assistant",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ezcards.netlify.app/retailer-lab*",
+        "https://ezcards.netlify.app/local-retailer*",
+        "http://localhost:8888/retailer-lab*",
+        "http://localhost:8888/local-retailer*",
+        "http://127.0.0.1:8888/retailer-lab*",
+        "http://127.0.0.1:8888/local-retailer*"
+      ],
+      "js": [
+        "content-lab.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "icons": {
+    "128": "icon128.png"
+  }
+}

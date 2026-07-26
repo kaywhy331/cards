@@ -1,9 +1,25 @@
 [build]
-  publish = "."
-  command = "echo 'Cards static deployment ready'"
+  command = "npm run ci"
+  publish = "dist"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "22"
+  NPM_FLAGS = "--no-audit --no-fund"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["netlify/lib/**"]
+
+[[redirects]]
+  from = "/local-retailer"
+  to = "/retailer-lab.html"
+  status = 200
+
+[[redirects]]
+  from = "/retailer-lab"
+  to = "/retailer-lab.html"
+  status = 200
 
 [[redirects]]
   from = "/*"
@@ -12,10 +28,16 @@
 
 [[headers]]
   for = "/*"
-
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self' https://api.telegram.org https://api.stripe.com https://api.x.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com"
+
+[[headers]]
+  for = "/downloads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+    Content-Disposition = "attachment"

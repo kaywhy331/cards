@@ -1,6 +1,0 @@
-version=0.5.0
-format=tar.xz+base64
-archive_sha256=e99256bcfd279672e7a496a068cff5b8345c1ce390aced538bfd0266fca8eb05
-encoded_sha256=bf60f3308d9fe7d963bbf7e47a41c8c4ec4a5104da6e5044855439eddf93885b
-parts=31
-encoded_bytes=91100

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#071011" />
+  <title>EZ Cards — AIO Education Lab</title>
+  <link rel="stylesheet" href="/assets/lab.css" />
+</head>
+<body>
+  <header class="lab-topbar">
+    <a href="/" class="lab-brand"><span>EZ</span><div><strong>Cards AIO Lab</strong><small>Owned queue and checkout simulation</small></div></a>
+    <div class="boundary"><i></i><span>LOCALIZED EDUCATION MODE</span><small>No third-party retailer actions</small></div>
+    <div class="top-actions"><button id="reset">Reset</button><button class="run" id="run">Run tasks</button></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><span class="eyebrow">AIO workflow demonstration</span><h1>Observe the entire queue pipeline.</h1><p>Task groups, synthetic profiles, signed local sessions, mock challenges, fake inventory races, manual and automated sandbox checkout, defensive controls, and runtime evidence.</p></div>
+      <div class="hero-note"><strong>Hard boundary</strong><p>The lab opens only <code>/retailer-lab.html</code> on this deployment. It has no arbitrary URL field, real retailer credentials, real CAPTCHA solver, proxy provider, cookie import, or payment integration.</p></div>
+    </section>
+
+    <section class="metrics">
+      <article><span>Run status</span><strong id="runState">Idle</strong><small id="tickState">Tick 0</small></article>
+      <article><span>Monitoring</span><strong id="monitorMetric">0</strong><small>Owned catalog only</small></article>
+      <article><span>Queued</span><strong id="queueMetric">0</strong><small>Signed synthetic sessions</small></article>
+      <article><span>Human checks</span><strong id="challengeMetric">0</strong><small>Mock handoffs</small></article>
+      <article class="good"><span>Fake orders</span><strong id="orderMetric">0</strong><small>Idempotent receipts</small></article>
+      <article class="bad"><span>Rejected</span><strong id="rejectMetric">0</strong><small>Defensive controls</small></article>
+    </section>
+
+    <div class="console">
+      <aside>
+        <span class="aside-title">Workspace</span>
+        <button class="nav active" data-panel="tasks">Task groups <b id="taskBadge">6</b></button>
+        <button class="nav" data-panel="queue">Queue monitor <b id="queueBadge">0</b></button>
+        <button class="nav" data-panel="challenges">Challenge hub <b id="challengeBadge">0</b></button>
+        <button class="nav" data-panel="orders">Sandbox orders <b id="orderBadge">0</b></button>
+        <button class="nav" data-panel="logs">Runtime log <b id="logBadge">1</b></button>
+
+        <span class="aside-title settings-title">Scenario</span>
+        <label>Queue mode<select id="queueMode"><option value="randomized">Randomized pre-queue</option><option value="fifo">FIFO</option><option value="traffic">Traffic-triggered</option></select></label>
+        <label>Admission rate<input id="rate" type="number" min="1" max="5" value="2" /></label>
+        <label class="check"><input id="challenges" type="checkbox" checked /> Mock challenge</label>
+        <label class="check"><input id="duplicate" type="checkbox" checked /> Duplicate-account probe</label>
+        <label class="check"><input id="routeChange" type="checkbox" /> Route-change probe</label>
+        <label class="check"><input id="autoCheckout" type="checkbox" checked /> Auto sandbox checkout</label>
+        <a class="store-link" href="/retailer-lab.html?mode=randomized" target="_blank" rel="noopener">Open localized retailer ↗</a>
+      </aside>
+
+      <section class="stage">
+        <div class="panel active" data-panel-view="tasks">
+          <div class="panel-head"><div><span>Execution</span><h2>Synthetic task groups</h2></div><em>Sandbox only</em></div>
+          <div class="table-wrap"><table><thead><tr><th>Task</th><th>Profile / session</th><th>Queue</th><th>Progress</th><th>Status</th></tr></thead><tbody id="tasks"></tbody></table></div>
+        </div>
+
+        <div class="panel" data-panel-view="queue">
+          <div class="panel-head"><div><span>Waiting room</span><h2>Queue monitor</h2></div><em>HMAC-bound</em></div>
+          <div id="queueTrack" class="queue-track"></div>
+          <div class="explain"><article><strong>Token integrity</strong><p>Scenario, account, device, route, issue/expiry times, and nonce are bound into the synthetic session.</p></article><article><strong>Replay resistance</strong><p>A consumed sandbox nonce cannot create a second purchase window or duplicate order.</p></article><article><strong>Fairness modes</strong><p>Compare deterministic randomization, FIFO ordering, and traffic-triggered admission.</p></article></div>
+        </div>
+
+        <div class="panel" data-panel-view="challenges">
+          <div class="panel-head"><div><span>Human handoff</span><h2>Mock challenge hub</h2></div><em class="orange">No solver</em></div>
+          <div id="challengeGrid" class="challenge-grid"><div class="empty">No challenges issued.</div></div>
+        </div>
+
+        <div class="panel" data-panel-view="orders">
+          <div class="panel-head"><div><span>Commerce sandbox</span><h2>Fake inventory and receipts</h2></div><em>No payment</em></div>
+          <div class="inventory"><article><span>ETB</span><strong id="etb">4</strong><small>Limit 1</small></article><article><span>UPC</span><strong id="upc">2</strong><small>Limit 1</small></article><article><span>Promo</span><strong id="promo">5</strong><small>Limit 1</small></article><article><span>Receipts</span><strong id="receipts">0</strong><small>Fake only</small></article></div>
+          <div id="orders" class="order-list"><div class="empty">No sandbox orders yet.</div></div>
+        </div>
+
+        <div class="panel" data-panel-view="logs">
+          <div class="panel-head"><div><span>Evidence</span><h2>Runtime log</h2></div><button id="clearLogs">Clear</button></div>
+          <div id="logs" class="logs"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="/assets/lab.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f8fb" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>CardForge — Local Retailer Queue Lab</title>
+  <link rel="stylesheet" href="/assets/retailer-lab.css" />
+</head>
+<body data-ezcards-lab-state="PRODUCT">
+  <div class="lab-ribbon" role="status">
+    <strong>LOCAL EDUCATION LAB</strong>
+    <span>Fake inventory · mock queue · no real retailer, payment, or purchase</span>
+    <a href="/">Return to EZ Cards</a>
+  </div>
+
+  <header class="store-header">
+    <a class="store-brand" href="/retailer-lab.html" aria-label="CardForge home">
+      <span class="brand-gem">CF</span>
+      <span><strong>CardForge</strong><small>collectibles lab</small></span>
+    </a>
+    <div class="store-search" aria-label="Demo product search">
+      <span>⌕</span><input aria-label="Search products" value="Pitch Black Elite Trainer Box" readonly />
+    </div>
+    <nav class="store-actions" aria-label="Store controls">
+      <button id="accountButton">Account</button>
+      <button id="cartButton">Cart <b id="cartCount">0</b></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="product-view lab-view active" data-view="PRODUCT">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">Trading cards <span>/</span> Pokémon <span>/</span> Elite Trainer Boxes</nav>
+      <div class="product-layout">
+        <div class="product-gallery">
+          <div class="product-art" aria-label="Synthetic Pitch Black Elite Trainer Box artwork">
+            <div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div>
+            <div class="fake-box"><span>MEGA<br />EVOLUTION</span><strong>PITCH<br />BLACK</strong><small>ELITE TRAINER BOX</small></div>
+          </div>
+          <div class="thumbnail active"><span>Product</span></div>
+          <div class="thumbnail"><span>Contents</span></div>
+          <div class="thumbnail"><span>Back</span></div>
+        </div>
+
+        <article class="product-details">
+          <span class="exclusive">LAB EXCLUSIVE</span>
+          <h1>Pitch Black Elite Trainer Box</h1>
+          <div class="rating">★★★★★ <span>4.9 · synthetic reviews</span></div>
+          <p class="sku">Item CF-PB-ETB-331</p>
+          <strong class="price">$49.99</strong>
+          <div class="availability"><i></i><span><strong>Demo inventory available</strong><small id="inventoryLabel">12 fake units remaining</small></span></div>
+          <div class="fulfillment">
+            <button class="selected"><strong>Ship</strong><small>Free · sandbox</small></button>
+            <button><strong>Pickup</strong><small>Lab store</small></button>
+          </div>
+          <div class="limit-note"><strong>Limit 1</strong> per synthetic collector profile.</div>
+          <button class="buy-button" id="joinDrop">Join demo release</button>
+          <p class="fine-print">This page is an original, localized teaching replica. It does not connect to or impersonate a real retailer.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="queue-view lab-view" data-view="PREQUEUE">
+      <div class="queue-shell">
+        <div class="queue-logo"><span>CF</span></div>
+        <span class="queue-kicker">Scheduled release waiting room</span>
+        <h1>You’re in the pre-queue</h1>
+        <p>Everyone present before the simulated launch receives a deterministic randomized place when the event begins.</p>
+        <div class="launch-countdown"><span>Position assignment in</span><strong id="prequeueCountdown">00:05</strong></div>
+        <div class="queue-rules"><span>✓ Keep this tab open</span><span>✓ No refresh is needed</span><span>✓ One session per fake account</span></div>
+        <button class="plain-button" id="cancelQueue">Leave waiting room</button>
+      </div>
+    </section>
+
+    <section class="queue-view lab-view" data-view="QUEUED">
+      <div class="queue-shell">
+        <div class="queue-logo"><span>CF</span></div>
+        <span class="queue-kicker">Virtual waiting room</span>
+        <h1>Your place is secured</h1>
+        <p>The owned queue engine is admitting synthetic visitors at a controlled rate.</p>
+        <div class="position-card"><span>People ahead of you</span><strong id="queuePosition">14</strong><small id="queueEstimate">Estimated wait: under 1 minute</small></div>
+        <div class="queue-progress"><span id="queueProgress"></span></div>
+        <div class="session-details"><div><span>Session</span><strong id="sessionShort">LAB-••••</strong></div><div><span>Continuity</span><strong>Bound</strong></div><div><span>Queue mode</span><strong id="queueModeLabel">Randomized</strong></div></div>
+        <button class="plain-button" id="forceChallenge">Trigger mock challenge</button>
+      </div>
+    </section>
+
+    <section class="queue-view lab-view" data-view="CHALLENGE">
+      <div class="queue-shell challenge-shell">
+        <div class="challenge-mark">✓</div>
+        <span class="queue-kicker">Mock human verification</span>
+        <h1>Confirm you’re present</h1>
+        <p>This is a locally generated teaching challenge. No CAPTCHA provider or solver is involved.</p>
+        <label class="mock-check"><input id="humanCheck" type="checkbox" /><span><strong>I am the tester</strong><small>Complete the challenge manually to continue.</small></span></label>
+        <button class="buy-button" id="completeChallenge" disabled>Complete verification</button>
+        <p class="fine-print">The production extension pauses and hands control to the person whenever a real site requires verification.</p>
+      </div>
+    </section>
+
+    <section class="queue-view lab-view" data-view="READY">
+      <div class="queue-shell success-shell">
+        <div class="success-mark">✓</div>
+        <span class="queue-kicker">Purchase window opened</span>
+        <h1>It’s your turn</h1>
+        <p>Your synthetic reservation is active. Checkout remains a deliberate human action.</p>
+        <div class="purchase-timer"><span>Window closes in</span><strong id="purchaseCountdown">05:00</strong></div>
+        <button class="buy-button" id="addToCart">Add fake item to cart</button>
+      </div>
+    </section>
+
+    <section class="checkout-view lab-view" data-view="CHECKOUT">
+      <div class="checkout-grid">
+        <section class="checkout-card">
+          <span class="queue-kicker">Sandbox checkout</span>
+          <h1>Complete fake order</h1>
+          <p>Nothing entered here is transmitted. The form uses synthetic defaults and creates only a local receipt.</p>
+          <form id="checkoutForm">
+            <div class="form-grid"><label>Full name<input name="name" value="Demo Collector" required /></label><label>Email<input name="email" type="email" value="collector@example.test" required /></label></div>
+            <label>Delivery address<input name="address" value="331 Sandbox Avenue" required /></label>
+            <div class="form-grid"><label>City<input name="city" value="Card City" required /></label><label>ZIP<input name="zip" value="00000" required /></label></div>
+            <fieldset><legend>Fake payment</legend><div class="fake-payment"><span>TEST</span><strong>4242 4242 4242 4242</strong><small>No payment network is contacted</small></div></fieldset>
+            <label class="consent"><input type="checkbox" required /> I understand this creates a demonstration-only order.</label>
+            <button class="buy-button" type="submit">Place fake order</button>
+          </form>
+        </section>
+        <aside class="order-summary">
+          <h2>Order summary</h2>
+          <div class="summary-product"><div class="summary-art">PB</div><div><strong>Pitch Black Elite Trainer Box</strong><small>Qty 1 · synthetic inventory</small></div><b>$49.99</b></div>
+          <div class="summary-line"><span>Shipping</span><strong>$0.00</strong></div><div class="summary-line"><span>Estimated tax</span><strong>$4.12</strong></div><div class="summary-line total"><span>Fake total</span><strong>$54.11</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="queue-view lab-view" data-view="COMPLETE">
+      <div class="queue-shell receipt-shell">
+        <div class="success-mark">✓</div>
+        <span class="queue-kicker">Sandbox order complete</span>
+        <h1>Demonstration successful</h1>
+        <p>The queue, challenge, reservation, and manual checkout workflow completed without contacting an external retailer.</p>
+        <div class="receipt"><span>Receipt</span><strong id="receiptId">LAB-ORDER-331</strong><small id="receiptTime"></small></div>
+        <div class="completion-actions"><button class="buy-button" id="restartLab">Run again</button><a class="plain-button link-button" href="/#devices">Return to EZ Cards</a></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="state-monitor" aria-live="polite"><span>Lab state</span><strong id="stateLabel">PRODUCT</strong></div>
+  <script src="/assets/retailer-lab.js" defer></script>
+</body>
+</html>
