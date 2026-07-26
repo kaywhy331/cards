@@ -1,0 +1,44 @@
+name: EZ Cards CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ezcards-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-test-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate, test, and build
+        run: npm run ci
+      - name: Verify extension archive
+        run: |
+          test -f dist/downloads/ezcards-extension.zip
+          unzip -t dist/downloads/ezcards-extension.zip
+      - name: Verify production bundle markers
+        run: |
+          grep --fixed-strings --quiet "EZ Cards" dist/index.html
+          grep --fixed-strings --quiet "LOCALIZED EDUCATION MODE" dist/lab.html
+          grep --fixed-strings --quiet "LOCAL EDUCATION LAB" dist/retailer-lab.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ezcards-static-and-extension
+          path: |
+            dist/
+          retention-days: 7
