@@ -6,6 +6,9 @@ on:
       - agent/aio-simulation-lab
     paths:
       - .source-upload/READY
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -17,6 +20,7 @@ concurrency:
 
 jobs:
   materialize:
+    if: github.head_ref == 'agent/aio-simulation-lab' || github.ref_name == 'agent/aio-simulation-lab'
     runs-on: ubuntu-latest
     steps:
       - name: Check out feature branch
