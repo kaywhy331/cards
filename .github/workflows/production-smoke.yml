@@ -1,0 +1,54 @@
+name: Verify ezcards production
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ezcards-production-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Wait for the expected production release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          url="https://ezcards.netlify.app/"
+          expected_title="Cards — TCG Drop Intelligence"
+          expected_marker="Queue orchestration console"
+
+          for attempt in $(seq 1 24); do
+            status="$(curl --location --silent --show-error \
+              --output /tmp/ezcards.html \
+              --write-out '%{http_code}' \
+              --max-time 20 \
+              "$url" || true)"
+
+            if [[ "$status" == "200" ]] \
+              && grep --fixed-strings --quiet "$expected_title" /tmp/ezcards.html \
+              && grep --fixed-strings --quiet "$expected_marker" /tmp/ezcards.html; then
+              echo "Verified production release at $url"
+              grep --only-matching '<title>[^<]*' /tmp/ezcards.html || true
+              exit 0
+            fi
+
+            echo "Attempt $attempt/24: HTTP ${status:-request_failed}; expected release not visible yet."
+            sleep 10
+          done
+
+          echo "Production verification failed. Response excerpt:"
+          sed -n '1,80p' /tmp/ezcards.html 2>/dev/null || true
+          exit 1
