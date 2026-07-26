@@ -1,12 +1,8 @@
 name: Verify ezcards production
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -19,36 +15,39 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
-      - name: Wait for the expected production release
+      - name: Wait for Netlify production release
         shell: bash
         run: |
           set -euo pipefail
+          base="https://ezcards.netlify.app"
+          for attempt in $(seq 1 36); do
+            root_status="$(curl -L -sS -o /tmp/root.html -w '%{http_code}' --max-time 20 "$base/" || true)"
+            api_status="$(curl -L -sS -o /tmp/health.json -w '%{http_code}' --max-time 20 "$base/api/health" || true)"
+            lab_status="$(curl -L -sS -o /tmp/lab.html -w '%{http_code}' --max-time 20 "$base/lab.html" || true)"
+            store_status="$(curl -L -sS -o /tmp/store.html -w '%{http_code}' --max-time 20 "$base/local-retailer" || true)"
+            zip_status="$(curl -L -sS -o /tmp/extension.zip -w '%{http_code}' --max-time 20 "$base/downloads/ezcards-extension.zip" || true)"
 
-          url="https://ezcards.netlify.app/"
-          expected_title="Cards — TCG Drop Intelligence"
-          expected_marker="Queue orchestration console"
-
-          for attempt in $(seq 1 24); do
-            status="$(curl --location --silent --show-error \
-              --output /tmp/ezcards.html \
-              --write-out '%{http_code}' \
-              --max-time 20 \
-              "$url" || true)"
-
-            if [[ "$status" == "200" ]] \
-              && grep --fixed-strings --quiet "$expected_title" /tmp/ezcards.html \
-              && grep --fixed-strings --quiet "$expected_marker" /tmp/ezcards.html; then
-              echo "Verified production release at $url"
-              grep --only-matching '<title>[^<]*' /tmp/ezcards.html || true
+            if [[ "$root_status" == "200" ]] \
+              && grep -Fq "EZ Cards" /tmp/root.html \
+              && [[ "$api_status" == "200" ]] \
+              && grep -Fq '"version":"0.5.0"' /tmp/health.json \
+              && [[ "$lab_status" == "200" ]] \
+              && grep -Fq "LOCALIZED EDUCATION MODE" /tmp/lab.html \
+              && [[ "$store_status" == "200" ]] \
+              && grep -Fq "LOCAL EDUCATION LAB" /tmp/store.html \
+              && [[ "$zip_status" == "200" ]]; then
+              unzip -t /tmp/extension.zip
+              echo "Production release verified at $base"
+              cat /tmp/health.json
               exit 0
             fi
 
-            echo "Attempt $attempt/24: HTTP ${status:-request_failed}; expected release not visible yet."
+            echo "Attempt $attempt/36 root=$root_status api=$api_status lab=$lab_status retailer=$store_status zip=$zip_status"
             sleep 10
           done
 
-          echo "Production verification failed. Response excerpt:"
-          sed -n '1,80p' /tmp/ezcards.html 2>/dev/null || true
+          echo "Production verification failed"
+          echo "Health response:"; cat /tmp/health.json 2>/dev/null || true
           exit 1
