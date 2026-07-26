@@ -45,9 +45,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p /tmp/existing-workflows
+          cp -a .github/workflows/. /tmp/existing-workflows/
           tar --extract --xz --file /tmp/ezcards-source.tar.xz --directory .
           rm -rf .source-full
-          rm -f .github/workflows/materialize-full-scope.yml
+          rm -rf .github/workflows
+          mkdir -p .github/workflows
+          cp -a /tmp/existing-workflows/. .github/workflows/
           test -f package.json
           test -f netlify/functions/api.mjs
           test -f netlify/functions/signal-worker.mjs
