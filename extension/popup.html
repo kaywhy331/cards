@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>EZ Cards</title><link rel="stylesheet" href="popup.css" /></head>
+<body>
+  <header><span>EZ</span><div><strong>Queue Assistant</strong><small>Localized lab executor</small></div></header>
+  <main>
+    <section id="unpaired" hidden>
+      <p>Generate a six-character pairing code from the EZ Cards Devices page.</p>
+      <label>Service URL<input id="serviceUrl" value="https://ezcards.netlify.app" /></label>
+      <label>Device name<input id="deviceName" placeholder="Kevin's Chrome" /></label>
+      <label>Pairing code<input id="pairingCode" maxlength="6" autocomplete="one-time-code" placeholder="ABC123" /></label>
+      <button id="pair">Pair extension</button>
+    </section>
+    <section id="paired" hidden>
+      <div class="status"><i></i><span><strong id="deviceLabel">Connected</strong><small id="serviceLabel"></small></span></div>
+      <div class="facts"><div><span>Signed jobs</span><strong>Enabled</strong></div><div><span>Target boundary</span><strong>Local lab only</strong></div><div><span>Last sync</span><strong id="lastSync">Never</strong></div></div>
+      <button id="sync">Sync now</button><button class="secondary" id="openApp">Open EZ Cards</button><button class="danger" id="clear">Unpair this browser</button>
+    </section>
+    <p class="message" id="message"></p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

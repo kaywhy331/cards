@@ -1,15 +1,14 @@
-name: Verify ezcards production
+name: Verify Netlify deploy preview
 
 on:
-  push:
+  pull_request:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ezcards-production-smoke
+  group: ezcards-preview-smoke-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -17,17 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Wait for Netlify production release
+      - name: Wait for and verify deploy preview
         shell: bash
+        env:
+          PREVIEW_URL: https://deploy-preview-${{ github.event.pull_request.number }}--ezcards.netlify.app
         run: |
           set -euo pipefail
-          base="https://ezcards.netlify.app"
           for attempt in $(seq 1 36); do
-            root_status="$(curl -L -sS -o /tmp/root.html -w '%{http_code}' --max-time 20 "$base/" || true)"
-            api_status="$(curl -L -sS -o /tmp/health.json -w '%{http_code}' --max-time 20 "$base/api/health" || true)"
-            lab_status="$(curl -L -sS -o /tmp/lab.html -w '%{http_code}' --max-time 20 "$base/lab.html" || true)"
-            store_status="$(curl -L -sS -o /tmp/store.html -w '%{http_code}' --max-time 20 "$base/local-retailer" || true)"
-            zip_status="$(curl -L -sS -o /tmp/extension.zip -w '%{http_code}' --max-time 20 "$base/downloads/ezcards-extension.zip" || true)"
+            root_status="$(curl -L -sS -o /tmp/root.html -w '%{http_code}' --max-time 20 "$PREVIEW_URL/" || true)"
+            api_status="$(curl -L -sS -o /tmp/health.json -w '%{http_code}' --max-time 20 "$PREVIEW_URL/api/health" || true)"
+            lab_status="$(curl -L -sS -o /tmp/lab.html -w '%{http_code}' --max-time 20 "$PREVIEW_URL/lab.html" || true)"
+            store_status="$(curl -L -sS -o /tmp/store.html -w '%{http_code}' --max-time 20 "$PREVIEW_URL/local-retailer" || true)"
+            zip_status="$(curl -L -sS -o /tmp/extension.zip -w '%{http_code}' --max-time 20 "$PREVIEW_URL/downloads/ezcards-extension.zip" || true)"
 
             if [[ "$root_status" == "200" ]] \
               && grep -Fq "EZ Cards" /tmp/root.html \
@@ -39,7 +39,7 @@ jobs:
               && grep -Fq "LOCAL EDUCATION LAB" /tmp/store.html \
               && [[ "$zip_status" == "200" ]]; then
               unzip -t /tmp/extension.zip
-              echo "Production release verified at $base"
+              echo "Deploy preview verified at $PREVIEW_URL"
               cat /tmp/health.json
               exit 0
             fi
@@ -48,6 +48,6 @@ jobs:
             sleep 10
           done
 
-          echo "Production verification failed"
+          echo "Preview verification failed"
           echo "Health response:"; cat /tmp/health.json 2>/dev/null || true
           exit 1
