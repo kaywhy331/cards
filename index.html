@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#071011" />
+  <meta name="description" content="Invite-only TCG drop intelligence, personalized watch rules, and an isolated AIO queue simulation lab." />
+  <title>Cards — TCG Drop Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="Cards home">
+      <span class="brand-mark">C</span>
+      <span><strong>Cards</strong><small>TCG intelligence</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <button class="nav-link active" data-view="overview">Overview</button>
+      <button class="nav-link" data-view="signals">Signals</button>
+      <button class="nav-link" data-view="rules">Watch rules</button>
+      <button class="nav-link" data-view="lab">AIO Lab</button>
+    </nav>
+    <div class="top-actions">
+      <span class="invite-pill"><span></span> Invite-only beta</span>
+      <button class="ghost-button" id="openCommand">⌘ Command</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="view active" id="view-overview" data-view-panel="overview">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Signal-to-browser control plane</span>
+          <h1>Know the drop.<br /><em>Enter at the right time.</em></h1>
+          <p>Cards turns noisy Telegram and release-calendar posts into verified, deduplicated TCG events—then matches each event to the collectors who actually want it.</p>
+          <div class="hero-actions">
+            <button class="primary-button" data-go="lab">Open AIO simulation</button>
+            <button class="secondary-button" data-go="rules">Configure watch rules</button>
+          </div>
+          <div class="trust-row">
+            <span>✓ Human checkout</span>
+            <span>✓ One job per event</span>
+            <span>✓ Device-bound plans</span>
+          </div>
+        </div>
+
+        <div class="signal-orbit card-shell">
+          <div class="panel-head compact">
+            <div><span class="panel-kicker">Live intake example</span><h2>Signal resolution</h2></div>
+            <span class="status-chip live"><i></i> Processing</span>
+          </div>
+          <div class="pipeline">
+            <article class="pipeline-row">
+              <span class="pipeline-icon telegram">T</span>
+              <div><strong>Telegram observation</strong><small>“Pitch Black ETB back up at Target”</small></div>
+              <span class="mini-chip muted">raw</span>
+            </article>
+            <span class="pipeline-line"></span>
+            <article class="pipeline-row">
+              <span class="pipeline-icon link">↗</span>
+              <div><strong>Merchant URL resolved</strong><small>Canonical vendor listing + SKU identified</small></div>
+              <span class="mini-chip">verified</span>
+            </article>
+            <span class="pipeline-line"></span>
+            <article class="pipeline-row">
+              <span class="pipeline-icon merge">2→1</span>
+              <div><strong>Duplicate merged</strong><small>Two posts confirm one active restock</small></div>
+              <span class="mini-chip orange">2 sources</span>
+            </article>
+            <span class="pipeline-line"></span>
+            <article class="pipeline-row emphasized">
+              <span class="pipeline-icon plan">✓</span>
+              <div><strong>Personal plan armed</strong><small>Pokémon + ETB + Target rule matched</small></div>
+              <span class="mini-chip">ready</span>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-card"><span>Verified signals</span><strong id="metricSignals">14</strong><small>Last 24 hours</small></article>
+        <article class="metric-card"><span>Duplicates merged</span><strong>31</strong><small>No repeated tabs</small></article>
+        <article class="metric-card"><span>Matching rules</span><strong id="metricRules">3</strong><small>Collector-specific</small></article>
+        <article class="metric-card accent"><span>Paired device</span><strong>Ready</strong><small>Chrome · Windows</small></article>
+      </div>
+
+      <div class="overview-grid">
+        <section class="card-shell upcoming-card">
+          <div class="panel-head">
+            <div><span class="panel-kicker">Personalized calendar</span><h2>Upcoming matching drops</h2></div>
+            <button class="text-button" data-go="signals">View signals →</button>
+          </div>
+          <div class="drop-list">
+            <article class="drop-row">
+              <div class="drop-date"><strong>31</strong><span>JUL</span></div>
+              <div class="drop-main"><span class="game-label pokemon">Pokémon</span><strong>Storm Esmeralda accessories</strong><small>Announcement · Japanese release</small></div>
+              <div class="drop-meta"><span>Calendar</span><strong>9:00 AM</strong></div>
+              <span class="status-chip scheduled">Scheduled</span>
+            </article>
+            <article class="drop-row">
+              <div class="drop-date hot"><strong>NOW</strong><span>LIVE</span></div>
+              <div class="drop-main"><span class="game-label pokemon">Pokémon</span><strong>Pitch Black Elite Trainer Box</strong><small>Target · Restock confirmation</small></div>
+              <div class="drop-meta"><span>Confidence</span><strong>98%</strong></div>
+              <span class="status-chip live"><i></i> Live</span>
+            </article>
+            <article class="drop-row">
+              <div class="drop-date"><strong>31</strong><span>JUL</span></div>
+              <div class="drop-main"><span class="game-label onepiece">One Piece</span><strong>Starter Decks ST-31 through ST-36</strong><small>Scheduled release · Multiple products</small></div>
+              <div class="drop-meta"><span>Products</span><strong>8</strong></div>
+              <span class="status-chip scheduled">Scheduled</span>
+            </article>
+          </div>
+        </section>
+
+        <aside class="card-shell readiness-card">
+          <div class="panel-head"><div><span class="panel-kicker">Execution readiness</span><h2>Device check</h2></div><span class="health-ring">92</span></div>
+          <div class="readiness-list">
+            <div><span><i class="ok"></i> Browser extension</span><strong>Connected</strong></div>
+            <div><span><i class="ok"></i> Clock synchronization</span><strong>± 38 ms</strong></div>
+            <div><span><i class="ok"></i> Notifications</span><strong>Enabled</strong></div>
+            <div><span><i class="warn"></i> Member database</span><strong>Demo mode</strong></div>
+          </div>
+          <button class="secondary-button full" id="runReadiness">Run test drop</button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-signals" data-view-panel="signals">
+      <div class="page-heading">
+        <div><span class="eyebrow">Central intelligence</span><h1>Signal intake</h1><p>Each post becomes evidence attached to a canonical event—not a separate browser action.</p></div>
+        <button class="primary-button" id="addSignal">Simulate intake</button>
+      </div>
+
+      <div class="signals-layout">
+        <aside class="filter-panel card-shell">
+          <span class="panel-kicker">Filters</span>
+          <label>Event status<select id="signalStatus"><option>All statuses</option><option>Live</option><option>Scheduled</option><option>Review</option></select></label>
+          <label>Game<select><option>All games</option><option>Pokémon</option><option>One Piece</option><option>Lorcana</option></select></label>
+          <label>Vendor<select><option>All vendors</option><option>Target</option><option>Pokémon Center</option><option>Walmart</option></select></label>
+          <div class="filter-stat"><span>Observations today</span><strong>46</strong></div>
+          <div class="filter-stat"><span>Canonical events</span><strong>14</strong></div>
+          <div class="filter-stat"><span>Merge ratio</span><strong>3.3×</strong></div>
+        </aside>
+
+        <section class="card-shell signal-table-card">
+          <div class="panel-head"><div><span class="panel-kicker">Normalized observations</span><h2>Latest signals</h2></div><span class="status-chip live"><i></i> Stream active</span></div>
+          <div class="signal-table" id="signalTable">
+            <article class="signal-entry" data-status="Live">
+              <div class="source-avatar">T</div><div><strong>Pitch Black ETB back up at Target</strong><small>Telegram · Hu$tle relay · 18 seconds ago</small></div>
+              <div><span class="entity-tag">Pokémon</span><span class="entity-tag">ETB</span><span class="entity-tag">Target</span></div>
+              <div class="dedupe-cell"><strong>event_pb_target_07</strong><small>Merged with 1 prior post</small></div><span class="status-chip live"><i></i> Live</span>
+            </article>
+            <article class="signal-entry" data-status="Live">
+              <div class="source-avatar x">X</div><div><strong>Still seeing success on Pitch Black ETBs</strong><small>X source enrichment · 1 minute ago</small></div>
+              <div><span class="entity-tag">Pokémon</span><span class="entity-tag">ETB</span><span class="entity-tag">Target</span></div>
+              <div class="dedupe-cell"><strong>event_pb_target_07</strong><small>Confirmation only</small></div><span class="status-chip merged">Merged</span>
+            </article>
+            <article class="signal-entry" data-status="Scheduled">
+              <div class="source-avatar">T</div><div><strong>One Piece releases dropping July 31</strong><small>Telegram · Calendar classification · 6 minutes ago</small></div>
+              <div><span class="entity-tag">One Piece</span><span class="entity-tag">Starter Deck</span></div>
+              <div class="dedupe-cell"><strong>event_op_0731</strong><small>8 child products</small></div><span class="status-chip scheduled">Scheduled</span>
+            </article>
+            <article class="signal-entry" data-status="Review">
+              <div class="source-avatar x">X</div><div><strong>First look at Storm Esmeralda accessories</strong><small>X source only · merchant URL unresolved</small></div>
+              <div><span class="entity-tag">Pokémon</span><span class="entity-tag">Accessories</span></div>
+              <div class="dedupe-cell"><strong>candidate_184</strong><small>Needs curator review</small></div><span class="status-chip review">Review</span>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="view-rules" data-view-panel="rules">
+      <div class="page-heading">
+        <div><span class="eyebrow">Collector preferences</span><h1>Watch rules</h1><p>AND across categories, OR within each category. Exclusions always win.</p></div>
+        <button class="primary-button" id="saveRules">Save preferences</button>
+      </div>
+
+      <div class="rules-layout">
+        <section class="rule-builder card-shell">
+          <div class="panel-head"><div><span class="panel-kicker">Rule builder</span><h2>Pokémon premium products</h2></div><span class="status-chip live"><i></i> Active</span></div>
+          <div class="rule-section">
+            <div class="rule-label"><strong>Games</strong><small>Select one or more</small></div>
+            <div class="choice-grid" data-choice-group="games">
+              <button class="choice selected" data-value="Pokemon"><span>PK</span>Pokémon</button>
+              <button class="choice" data-value="One Piece"><span>OP</span>One Piece</button>
+              <button class="choice" data-value="Lorcana"><span>LO</span>Lorcana</button>
+              <button class="choice" data-value="Gundam"><span>GU</span>Gundam</button>
+              <button class="choice" data-value="Magic"><span>MT</span>Magic</button>
+              <button class="choice" data-value="Dragon Ball"><span>DB</span>Dragon Ball</button>
+            </div>
+          </div>
+          <div class="rule-section">
+            <div class="rule-label"><strong>Product types</strong><small>Any selected type may match</small></div>
+            <div class="tag-choices" data-choice-group="products">
+              <button class="tag-choice selected">ETB</button><button class="tag-choice selected">UPC</button><button class="tag-choice selected">Booster Bundle</button><button class="tag-choice">Booster Box</button><button class="tag-choice">Tins</button><button class="tag-choice">Collection Box</button><button class="tag-choice">Promo Set</button>
+            </div>
+          </div>
+          <div class="rule-section">
+            <div class="rule-label"><strong>Vendors</strong><small>Only these stores qualify</small></div>
+            <div class="vendor-grid" data-choice-group="vendors">
+              <button class="vendor-choice selected">Target</button><button class="vendor-choice selected">Pokémon Center</button><button class="vendor-choice selected">Best Buy</button><button class="vendor-choice">Walmart</button><button class="vendor-choice">Costco</button><button class="vendor-choice">Sam’s Club</button>
+            </div>
+          </div>
+          <div class="rule-section behavior-section">
+            <div class="rule-label"><strong>Behavior</strong><small>Human checkout remains required</small></div>
+            <label class="radio-row"><input type="radio" name="behavior" value="queue" checked /> <span><strong>Queue assist</strong><small>Open one verified page and hand control to me.</small></span></label>
+            <label class="radio-row"><input type="radio" name="behavior" value="open" /> <span><strong>Open and notify</strong><small>Open the product page without queue monitoring.</small></span></label>
+            <label class="radio-row"><input type="radio" name="behavior" value="notify" /> <span><strong>Notify only</strong><small>Send an alert with the verified action link.</small></span></label>
+          </div>
+        </section>
+
+        <aside class="rule-preview card-shell">
+          <span class="panel-kicker">Effective logic</span>
+          <h2>Why an event matches</h2>
+          <div class="logic-block"><span>GAME</span><strong id="logicGames">Pokémon</strong></div>
+          <div class="logic-join">AND</div>
+          <div class="logic-block"><span>PRODUCT</span><strong id="logicProducts">ETB OR UPC OR Booster Bundle</strong></div>
+          <div class="logic-join">AND</div>
+          <div class="logic-block"><span>VENDOR</span><strong id="logicVendors">Target OR Pokémon Center OR Best Buy</strong></div>
+          <div class="match-example"><span>Example match</span><strong>Pitch Black ETB · Target</strong><small>All three categories matched ✓</small></div>
+          <div class="saved-note" id="savedNote">Preferences are stored locally in this deployed demo.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-lab" data-view-panel="lab">
+      <div class="lab-boundary"><span></span><strong>Owned simulation environment</strong><p>Fake accounts · fake inventory · synthetic queue tokens · no external retailer actions</p></div>
+      <div class="page-heading lab-heading">
+        <div><span class="eyebrow">AIO research laboratory</span><h1>Queue orchestration console</h1><p>Study task groups, waiting-room modes, session integrity, mock challenges, inventory races, and idempotent sandbox checkout.</p></div>
+        <div class="heading-actions"><button class="secondary-button" id="resetLab">Reset</button><button class="primary-button" id="startLab">Start simulation</button></div>
+      </div>
+
+      <div class="lab-metrics">
+        <article><span>Run state</span><strong id="labState">Idle</strong><small id="labTick">Tick 0</small></article>
+        <article><span>Queued</span><strong id="labQueued">0</strong><small>Randomized pre-queue</small></article>
+        <article><span>Challenges</span><strong id="labChallenges">0</strong><small>Mock human handoff</small></article>
+        <article class="success"><span>Fake orders</span><strong id="labOrders">0</strong><small>Idempotent receipts</small></article>
+        <article class="danger"><span>Rejected</span><strong id="labRejected">0</strong><small>Defensive controls</small></article>
+      </div>
+
+      <div class="lab-console">
+        <aside class="lab-sidebar">
+          <span class="sidebar-title">Workspace</span>
+          <button class="lab-tab active" data-lab-tab="tasks">Task groups <em>6</em></button>
+          <button class="lab-tab" data-lab-tab="queue">Queue <em id="queueTabCount">0</em></button>
+          <button class="lab-tab" data-lab-tab="challenges">Challenges <em id="challengeTabCount">0</em></button>
+          <button class="lab-tab" data-lab-tab="checkout">Checkout <em id="checkoutTabCount">0</em></button>
+          <button class="lab-tab" data-lab-tab="logs">Runtime logs <em id="logTabCount">1</em></button>
+          <span class="sidebar-title scenario-title">Scenario</span>
+          <label>Queue mode<select id="queueMode"><option value="randomized">Randomized pre-queue</option><option value="fifo">FIFO</option><option value="traffic">Traffic-triggered</option></select></label>
+          <label>Admissions per tick<input id="admissionRate" type="number" min="1" max="5" value="2" /></label>
+          <label class="toggle"><input id="challengeToggle" type="checkbox" checked /> Mock challenge</label>
+          <label class="toggle"><input id="duplicateToggle" type="checkbox" checked /> Duplicate-account probe</label>
+          <label class="toggle"><input id="routeToggle" type="checkbox" /> Route-change probe</label>
+        </aside>
+
+        <section class="lab-stage">
+          <div class="lab-panel active" data-lab-panel="tasks">
+            <div class="panel-head"><div><span class="panel-kicker">Execution</span><h2>Synthetic task groups</h2></div><span class="mini-chip muted">Sandbox only</span></div>
+            <div class="task-table-wrap">
+              <table class="task-table"><thead><tr><th>Task</th><th>Profile</th><th>Queue</th><th>Progress</th><th>Status</th></tr></thead><tbody id="taskTableBody"></tbody></table>
+            </div>
+          </div>
+          <div class="lab-panel" data-lab-panel="queue">
+            <div class="panel-head"><div><span class="panel-kicker">Waiting room</span><h2>Queue monitor</h2></div><span class="mini-chip">Synthetic tokens</span></div>
+            <div class="queue-track-visual" id="queueVisual"></div>
+            <div class="explainer-grid"><article><strong>Token binding</strong><p>Event, account, device, route, issue time, expiry, and one-time nonce.</p></article><article><strong>Replay control</strong><p>A consumed nonce cannot create a second purchase window.</p></article><article><strong>Fairness</strong><p>Pre-queue participants receive deterministic randomized positions.</p></article></div>
+          </div>
+          <div class="lab-panel" data-lab-panel="challenges">
+            <div class="panel-head"><div><span class="panel-kicker">Human verification</span><h2>Mock challenge hub</h2></div><span class="mini-chip orange">No solver</span></div>
+            <div class="challenge-grid" id="challengeGrid"><div class="empty-state">No mock challenges issued yet.</div></div>
+          </div>
+          <div class="lab-panel" data-lab-panel="checkout">
+            <div class="panel-head"><div><span class="panel-kicker">Commerce sandbox</span><h2>Fake inventory and orders</h2></div><span class="mini-chip">No payment</span></div>
+            <div class="inventory-grid"><article><span>ETB inventory</span><strong id="etbInventory">5</strong><small>Limit 1</small></article><article><span>UPC inventory</span><strong id="upcInventory">3</strong><small>Limit 1</small></article><article><span>Orders</span><strong id="orderInventory">0</strong><small>Fake receipts</small></article><article><span>Rejected</span><strong id="rejectInventory">0</strong><small>No mutation</small></article></div>
+            <div class="order-list" id="orderList"><div class="empty-state">No task has reached sandbox checkout.</div></div>
+          </div>
+          <div class="lab-panel" data-lab-panel="logs">
+            <div class="panel-head"><div><span class="panel-kicker">Observability</span><h2>Runtime events</h2></div><button class="text-button" id="clearLogs">Clear</button></div>
+            <div class="runtime-log" id="runtimeLog"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="command-dialog" id="commandDialog">
+    <div class="command-head"><strong>Quick command</strong><button id="closeCommand">×</button></div>
+    <button data-go="overview">⌂ Open overview <kbd>1</kbd></button>
+    <button data-go="signals">↗ Review signals <kbd>2</kbd></button>
+    <button data-go="rules">◇ Edit watch rules <kbd>3</kbd></button>
+    <button data-go="lab">⌁ Launch AIO lab <kbd>4</kbd></button>
+  </dialog>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
