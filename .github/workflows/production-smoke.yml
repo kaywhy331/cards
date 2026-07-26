@@ -3,13 +3,15 @@ name: Verify ezcards production
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ezcards-production-smoke
+  group: ezcards-production-smoke-${{ github.event.pull_request.number || 'main' }}
   cancel-in-progress: true
 
 jobs:
