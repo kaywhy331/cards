@@ -6,6 +6,9 @@ on:
       - agent/full-scope-complete
     paths:
       - .source-full/READY
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -17,7 +20,7 @@ concurrency:
 
 jobs:
   materialize:
-    if: github.ref_name == 'agent/full-scope-complete'
+    if: github.head_ref == 'agent/full-scope-complete' || github.ref_name == 'agent/full-scope-complete'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
