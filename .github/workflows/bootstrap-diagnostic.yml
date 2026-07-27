@@ -11,53 +11,35 @@ permissions:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 3
     steps:
-      - name: Query production bootstrap endpoints without mutating production
+      - name: Verify production bootstrap route preconditions
         shell: bash
         run: |
           set -euo pipefail
           base="https://ezcards.netlify.app/api"
-
-          echo "=== GET /health ==="
-          curl -sS -i "$base/health"
+          echo "Health:"
+          curl -sS "$base/health"
           echo
-
-          echo "=== GET /bootstrap ==="
-          curl -sS -i "$base/bootstrap"
+          echo "Bootstrap status:"
+          curl -sS "$base/bootstrap"
           echo
-
-          echo "=== POST /bootstrap with deliberately invalid token ==="
-          curl -sS -i -X POST "$base/bootstrap" \
+          echo "Expected invalid-token response:"
+          curl -sS -X POST "$base/bootstrap" \
             -H 'content-type: application/json' \
             --data '{"token":"diagnostic-invalid-token","name":"Diagnostic","email":"diagnostic-invalid@example.invalid","password":"diagnostic-password-123"}'
           echo
 
-      - name: Wait for deploy-preview diagnostic function
+      - name: Capture deploy-preview bootstrap primitive diagnostic
         shell: bash
         run: |
-          set -euo pipefail
-          base="https://deploy-preview-6--ezcards.netlify.app"
-          urls=(
-            "$base/.netlify/functions/bootstrap-primitives-diagnostic"
-            "$base/diagnostic/bootstrap-primitives"
-          )
-
-          for attempt in $(seq 1 30); do
-            for url in "${urls[@]}"; do
-              status="$(curl -sS -o /tmp/diagnostic.json -w '%{http_code}' \
-                -H 'x-diagnostic-key: ezcards-bootstrap-primitives-v1' \
-                --max-time 20 "$url" || true)"
-              if [[ "$status" == "200" ]]; then
-                echo "Diagnostic URL: $url"
-                cat /tmp/diagnostic.json
-                grep -Fq '"ok":true' /tmp/diagnostic.json
-                exit 0
-              fi
-              echo "Attempt $attempt/30 url=$url status=$status"
-              cat /tmp/diagnostic.json 2>/dev/null || true
-            done
-            sleep 5
-          done
-          echo "Diagnostic endpoint failed"
-          exit 1
+          set -u
+          url="https://deploy-preview-6--ezcards.netlify.app/.netlify/functions/bootstrap-primitives-diagnostic"
+          status="$(curl -sS -o /tmp/diagnostic.json -w '%{http_code}' \
+            -H 'x-diagnostic-key: ezcards-bootstrap-primitives-v1' \
+            --max-time 30 "$url" || true)"
+          echo "HTTP $status"
+          cat /tmp/diagnostic.json 2>/dev/null || true
+          echo
+          test "$status" = "200"
+          grep -Fq '"ok":true' /tmp/diagnostic.json
