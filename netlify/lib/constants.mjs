@@ -1,4 +1,4 @@
-export const APP_VERSION = "0.5.0";
+export const APP_VERSION = "0.5.1";
 export const APP_NAME = "EZ Cards";
 export const SESSION_COOKIE = "ezcards_session";
 export const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
