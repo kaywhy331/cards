@@ -33,24 +33,31 @@ jobs:
             --data '{"token":"diagnostic-invalid-token","name":"Diagnostic","email":"diagnostic-invalid@example.invalid","password":"diagnostic-password-123"}'
           echo
 
-      - name: Wait for deploy-preview diagnostic endpoint
+      - name: Wait for deploy-preview diagnostic function
         shell: bash
         run: |
           set -euo pipefail
-          url="https://deploy-preview-6--ezcards.netlify.app/diagnostic/bootstrap-primitives"
+          base="https://deploy-preview-6--ezcards.netlify.app"
+          urls=(
+            "$base/.netlify/functions/bootstrap-primitives-diagnostic"
+            "$base/diagnostic/bootstrap-primitives"
+          )
+
           for attempt in $(seq 1 30); do
-            status="$(curl -sS -o /tmp/diagnostic.json -w '%{http_code}' \
-              -H 'x-diagnostic-key: ezcards-bootstrap-primitives-v1' \
-              --max-time 20 "$url" || true)"
-            if [[ "$status" == "200" ]]; then
-              cat /tmp/diagnostic.json
-              grep -Fq '"ok":true' /tmp/diagnostic.json
-              exit 0
-            fi
-            echo "Attempt $attempt/30: status=$status"
-            cat /tmp/diagnostic.json 2>/dev/null || true
+            for url in "${urls[@]}"; do
+              status="$(curl -sS -o /tmp/diagnostic.json -w '%{http_code}' \
+                -H 'x-diagnostic-key: ezcards-bootstrap-primitives-v1' \
+                --max-time 20 "$url" || true)"
+              if [[ "$status" == "200" ]]; then
+                echo "Diagnostic URL: $url"
+                cat /tmp/diagnostic.json
+                grep -Fq '"ok":true' /tmp/diagnostic.json
+                exit 0
+              fi
+              echo "Attempt $attempt/30 url=$url status=$status"
+              cat /tmp/diagnostic.json 2>/dev/null || true
+            done
             sleep 5
           done
           echo "Diagnostic endpoint failed"
-          cat /tmp/diagnostic.json 2>/dev/null || true
           exit 1
