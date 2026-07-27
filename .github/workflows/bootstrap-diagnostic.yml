@@ -11,29 +11,41 @@ permissions:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
       - name: Verify production bootstrap route preconditions
         shell: bash
         run: |
           set -euo pipefail
           base="https://ezcards.netlify.app/api"
-          echo "Health:"; curl -sS "$base/health"; echo
-          echo "Bootstrap:"; curl -sS "$base/bootstrap"; echo
-          echo "Invalid token:"; curl -sS -X POST "$base/bootstrap" \
+          health="$(curl -sS "$base/health")"
+          bootstrap="$(curl -sS "$base/bootstrap")"
+          invalid="$(curl -sS -X POST "$base/bootstrap" \
             -H 'content-type: application/json' \
-            --data '{"token":"diagnostic-invalid-token","name":"Diagnostic","email":"diagnostic-invalid@example.invalid","password":"diagnostic-password-123"}'; echo
+            --data '{"token":"diagnostic-invalid-token","name":"Diagnostic","email":"diagnostic-invalid@example.invalid","password":"diagnostic-password-123"}')"
+          echo "$health"
+          echo "$bootstrap"
+          echo "$invalid"
+          grep -Fq '"setupRequired":true' <<< "$bootstrap"
+          grep -Fq 'Invalid one-time owner setup token' <<< "$invalid"
 
-      - name: Verify deploy-preview function discovery
+      - name: Verify corrected Netlify Blob bootstrap primitives on deploy preview
         shell: bash
         run: |
-          set -u
-          base="https://deploy-preview-6--ezcards.netlify.app"
-          for path in "/api/diag" "/diagnostic/bootstrap-primitives" "/.netlify/functions/diag" "/.netlify/functions/bootstrap-primitives-diagnostic"; do
+          set -euo pipefail
+          url="https://deploy-preview-6--ezcards.netlify.app/diagnostic/bootstrap-primitives"
+          for attempt in $(seq 1 24); do
             status="$(curl -sS -o /tmp/out -w '%{http_code}' \
               -H 'x-diagnostic-key: ezcards-bootstrap-primitives-v1' \
-              --max-time 30 "$base$path" || true)"
-            echo "$path => HTTP $status"
-            head -c 1200 /tmp/out 2>/dev/null || true
+              --max-time 30 "$url" || true)"
+            echo "Attempt $attempt: HTTP $status"
+            cat /tmp/out 2>/dev/null || true
             echo
+            if [[ "$status" == "200" ]] && grep -Fq '"ok":true' /tmp/out; then
+              grep -Fq '"passwordHash":true' /tmp/out
+              grep -Fq '"readBack":true' /tmp/out
+              exit 0
+            fi
+            sleep 5
           done
+          exit 1
