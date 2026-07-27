@@ -75,17 +75,21 @@ function supabaseStore(name) {
   };
 }
 
+export function blobWriteOptions(options = {}) {
+  const writeOptions = {};
+  if (options.onlyIfNew === true) writeOptions.onlyIfNew = true;
+  if (options.onlyIfMatch !== undefined && options.onlyIfMatch !== null) writeOptions.onlyIfMatch = options.onlyIfMatch;
+  if (options.metadata !== undefined) writeOptions.metadata = options.metadata;
+  return writeOptions;
+}
+
 async function blobStore(name) {
   const { getStore } = await import("@netlify/blobs");
   const store = getStore({ name, consistency: "strong" });
   return {
     async get(key) { return store.get(key, { type: "json" }); },
     async set(key, value, options = {}) {
-      return store.setJSON(key, value, {
-        onlyIfNew: options.onlyIfNew,
-        onlyIfMatch: options.onlyIfMatch,
-        metadata: options.metadata,
-      });
+      return store.setJSON(key, value, blobWriteOptions(options));
     },
     async delete(key) { return store.delete(key); },
     async list(prefix = "") {
