@@ -24,10 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           base="https://ezcards.netlify.app"
-          expected_version="0.5.0"
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            expected_version="0.5.1"
-          fi
+          expected_version="0.5.1"
 
           for attempt in $(seq 1 36); do
             root_status="$(curl -L -sS -o /tmp/root.html -w '%{http_code}' --max-time 20 "$base/" || true)"
