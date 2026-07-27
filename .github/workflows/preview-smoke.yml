@@ -32,14 +32,14 @@ jobs:
             if [[ "$root_status" == "200" ]] \
               && grep -Fq "EZ Cards" /tmp/root.html \
               && [[ "$api_status" == "200" ]] \
-              && grep -Fq '"version":"0.5.0"' /tmp/health.json \
+              && grep -Fq '"version":"0.5.1"' /tmp/health.json \
               && [[ "$lab_status" == "200" ]] \
               && grep -Fq "LOCALIZED EDUCATION MODE" /tmp/lab.html \
               && [[ "$store_status" == "200" ]] \
               && grep -Fq "LOCAL EDUCATION LAB" /tmp/store.html \
               && [[ "$zip_status" == "200" ]]; then
               unzip -t /tmp/extension.zip
-              echo "Deploy preview verified at $PREVIEW_URL"
+              echo "Deploy preview 0.5.1 verified at $PREVIEW_URL"
               cat /tmp/health.json
               exit 0
             fi

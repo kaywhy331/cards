@@ -1,6 +1,6 @@
 {
   "name": "ezcards",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "type": "module",
   "description": "Invite-only TCG signal intelligence, device-bound queue handoff, and an isolated AIO education lab.",

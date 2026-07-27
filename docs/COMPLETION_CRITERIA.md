@@ -56,7 +56,7 @@ The MVP is complete only when every **implementation** and **deployment** gate b
 
 - GitHub CI passes validation, all automated tests, build, static markers, and extension archive verification.
 - Netlify Deploy Preview returns HTTP 200 for the web app, API health, AIO lab, local retailer, and extension archive.
-- After merge, the production smoke workflow verifies version `0.5.0` and the same endpoints at `https://ezcards.netlify.app`.
+- After merge, the production smoke workflow verifies version `0.5.1` and the same endpoints at `https://ezcards.netlify.app`.
 
 ## Credential activation gates
 
