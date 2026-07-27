@@ -1,0 +1,34 @@
+name: Diagnose production bootstrap
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Query bootstrap endpoints without mutating production
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://ezcards.netlify.app/api"
+
+          echo "=== GET /health ==="
+          curl -sS -i "$base/health"
+          echo
+
+          echo "=== GET /bootstrap ==="
+          curl -sS -i "$base/bootstrap"
+          echo
+
+          echo "=== POST /bootstrap with deliberately invalid token ==="
+          curl -sS -i -X POST "$base/bootstrap" \
+            -H 'content-type: application/json' \
+            --data '{"token":"diagnostic-invalid-token","name":"Diagnostic","email":"diagnostic-invalid@example.invalid","password":"diagnostic-password-123"}'
+          echo
