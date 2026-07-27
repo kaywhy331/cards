@@ -24,6 +24,11 @@ jobs:
         run: |
           set -euo pipefail
           base="https://ezcards.netlify.app"
+          expected_version="0.5.0"
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            expected_version="0.5.1"
+          fi
+
           for attempt in $(seq 1 36); do
             root_status="$(curl -L -sS -o /tmp/root.html -w '%{http_code}' --max-time 20 "$base/" || true)"
             api_status="$(curl -L -sS -o /tmp/health.json -w '%{http_code}' --max-time 20 "$base/api/health" || true)"
@@ -34,19 +39,19 @@ jobs:
             if [[ "$root_status" == "200" ]] \
               && grep -Fq "EZ Cards" /tmp/root.html \
               && [[ "$api_status" == "200" ]] \
-              && grep -Fq '"version":"0.5.1"' /tmp/health.json \
+              && grep -Fq "\"version\":\"$expected_version\"" /tmp/health.json \
               && [[ "$lab_status" == "200" ]] \
               && grep -Fq "LOCALIZED EDUCATION MODE" /tmp/lab.html \
               && [[ "$store_status" == "200" ]] \
               && grep -Fq "LOCAL EDUCATION LAB" /tmp/store.html \
               && [[ "$zip_status" == "200" ]]; then
               unzip -t /tmp/extension.zip
-              echo "Production release verified at $base"
+              echo "Production release $expected_version verified at $base"
               cat /tmp/health.json
               exit 0
             fi
 
-            echo "Attempt $attempt/36 root=$root_status api=$api_status lab=$lab_status retailer=$store_status zip=$zip_status"
+            echo "Attempt $attempt/36 expected=$expected_version root=$root_status api=$api_status lab=$lab_status retailer=$store_status zip=$zip_status"
             sleep 10
           done
 
